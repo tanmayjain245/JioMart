@@ -1,10 +1,7 @@
 package com.jiomart.shop.controller;
 
 import com.jiomart.shop.entity.Product;
-import com.jiomart.shop.exceptions.ProductAlreadyExistException;
-import com.jiomart.shop.exceptions.SupplierNotFoundException;
 import com.jiomart.shop.services.ProductService;
-import com.jiomart.shop.exceptions.ProductNotFoundException;
 //import com.example.demo.services.ProductService;
 import com.jiomart.shop.vo.ProductVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import java.util.List;
 @Validated
+@CrossOrigin
 @RestController
 public class ProductController {
 
@@ -29,24 +26,29 @@ public class ProductController {
     }
 
     @GetMapping("/api/v1/products/{pid}")
-    ResponseEntity<Product> getProductByPid(@PathVariable Integer pid) throws ProductNotFoundException {
+    ResponseEntity<Product> getProductByPid(@PathVariable Integer pid) {
         return productService.getProductByPid(pid);
     }
 
     @PostMapping("/api/v1/products")
-    ResponseEntity<String> saveProduct(@RequestBody @Valid List<ProductVo> products) throws ProductAlreadyExistException, SupplierNotFoundException, ConstraintViolationException {
+    ResponseEntity<String> saveProduct(@RequestBody @Valid List<ProductVo> products)  {
         productService.saveProduct(products);
         return new ResponseEntity<>("Added !",HttpStatus.OK);
     }
 
-    @PutMapping("/api/v1/product")
-    ResponseEntity<String> updateProduct(@RequestBody @Valid List<ProductVo> products) throws ProductNotFoundException, SupplierNotFoundException, ConstraintViolationException {
+    @PutMapping("/api/v1/products")
+    ResponseEntity<String> updateProduct(@RequestBody @Valid List<ProductVo> products)  {
         productService.updateProduct(products);
         return new ResponseEntity<>("Updated !",HttpStatus.OK);
     }
+    @DeleteMapping("/api/v1/products/{pid}")
+    public ResponseEntity<String> deleteProduct(@PathVariable int pid){
+        return new ResponseEntity<>(productService.deleteProduct(pid), HttpStatus.OK);
+    }
 
 
-  //             ---------------- via json  -------------
+
+    //             ---------------- via json  -------------
 
 //    @GetMapping("/api/v1/products")
 //    ResponseEntity<List<Product>> getProducts() {

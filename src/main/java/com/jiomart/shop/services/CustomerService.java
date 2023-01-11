@@ -1,8 +1,7 @@
 package com.jiomart.shop.services;
 
 
-import com.jiomart.shop.exceptions.CustomerAlreadyExistException;
-import com.jiomart.shop.exceptions.CustomerNotFoundException;
+import com.jiomart.shop.exception.CustomerException;
 import com.jiomart.shop.repository.CustomerRepository;
 import com.jiomart.shop.entity.Customer;
 //import com.example.demo.entity.Product;
@@ -24,19 +23,19 @@ public class CustomerService {
         return new ResponseEntity<>(customerRepository.findAll(), HttpStatus.OK);
     }
 
-    public void saveCustomer(List<CustomerVo> customer) throws CustomerAlreadyExistException {
+    public void saveCustomer(List<CustomerVo> customer)  {
         for (CustomerVo cust : customer) {
             if (customerRepository.findById(cust.getCustomerID()).isPresent()) {
-                throw new CustomerAlreadyExistException(cust.getCustomerID());
+                throw new CustomerException("Customer already exist with id: "+cust.getCustomerID());
             }
             customerRepository.save(getEntity(cust));
         }
     }
 
-    public void updateCustomer(List<CustomerVo> customer) throws CustomerNotFoundException {
+    public void updateCustomer(List<CustomerVo> customer) {
         for (CustomerVo c : customer) {
             if (customerRepository.findById(c.getCustomerID()).isEmpty()) {
-                throw new CustomerNotFoundException(c.getCustomerID());
+                throw new CustomerException("Customer not found with id: "+c.getCustomerID());
             }
             customerRepository.save(getEntity(c));
         }

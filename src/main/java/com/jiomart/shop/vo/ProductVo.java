@@ -16,6 +16,15 @@ public class ProductVo {
 
     @NotBlank(message = "ProductName should not be empty !")
     private String productName;
+    private String productImg;
+
+    public String getProductImg() {
+        return productImg;
+    }
+
+    public void setProductImg(String productImg) {
+        this.productImg = productImg;
+    }
 
     public ProductVo() {}
 

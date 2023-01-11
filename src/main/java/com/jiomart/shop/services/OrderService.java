@@ -4,8 +4,8 @@ package com.jiomart.shop.services;
 import com.jiomart.shop.entity.Customer;
 import com.jiomart.shop.entity.OrderDetails;
 import com.jiomart.shop.entity.Shipper;
-import com.jiomart.shop.exceptions.CustomerNotFoundException;
-import com.jiomart.shop.exceptions.ShipperNotFoundException;
+import com.jiomart.shop.exception.CustomerException;
+import com.jiomart.shop.exception.ShipperException;
 import com.jiomart.shop.repository.CustomerRepository;
 import com.jiomart.shop.repository.OrderDetailsRepository;
 import com.jiomart.shop.repository.OrderRepository;
@@ -39,12 +39,12 @@ public class OrderService {
         return new ResponseEntity<>(orderRepository.findAll(), HttpStatus.OK);
     }
 
-    public void saveOrder(OrderVo order) throws CustomerNotFoundException, ParseException, ShipperNotFoundException {
+    public void saveOrder(OrderVo order) throws ParseException {
         Order order1 = convertToOrders(order);
         if(customerRepository.findById(order.getCustomerID()).isEmpty())
-            throw new CustomerNotFoundException(order.getCustomerID());
+            throw new CustomerException("Customer not found with id: "+order.getCustomerID());
         if(shipperRepository.findById(order.getShipperID()).isEmpty())
-            throw new ShipperNotFoundException(order.getShipperID());
+            throw new ShipperException("Shipper not found with id: "+order.getShipperID());
         orderRepository.save(order1);
     }
     static Order convertToOrders(OrderVo orderVo) throws ParseException {

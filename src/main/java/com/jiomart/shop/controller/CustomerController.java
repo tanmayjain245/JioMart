@@ -1,7 +1,5 @@
 package com.jiomart.shop.controller;
 
-import com.jiomart.shop.exceptions.CustomerAlreadyExistException;
-import com.jiomart.shop.exceptions.CustomerNotFoundException;
 import com.jiomart.shop.services.CustomerService;
 import com.jiomart.shop.entity.Customer;
 import com.jiomart.shop.vo.CustomerVo;
@@ -13,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-
+@CrossOrigin
 @Validated
 @RestController
 public class CustomerController {
@@ -29,13 +27,13 @@ public class CustomerController {
     }
 
     @PostMapping("/api/v1/customer")
-    ResponseEntity<String> saveCustomer(@RequestBody @Valid List<CustomerVo> customer) throws CustomerAlreadyExistException {
+    ResponseEntity<String> saveCustomer(@RequestBody @Valid List<CustomerVo> customer) {
         customerService.saveCustomer(customer);
         return new ResponseEntity<>("Added !",HttpStatus.OK);
     }
 
     @PutMapping("/api/v1/customer")
-    ResponseEntity<String> updateCustomer(@RequestBody @Valid List<CustomerVo> customer) throws CustomerNotFoundException {
+    ResponseEntity<String> updateCustomer(@RequestBody @Valid List<CustomerVo> customer) {
         customerService.updateCustomer(customer);
         return new ResponseEntity<>("Updated !",HttpStatus.OK);
     }
